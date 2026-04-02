@@ -43,7 +43,19 @@ window.addEventListener('DOMContentLoaded', () => {
     }
   }
 
+  function removeOldestToast() {
+    const toasts = container.querySelectorAll('div[data-toast]');
+    if (toasts.length >= 2) {
+      const oldest = toasts[0];
+      oldest.classList.add('opacity-0', 'translate-x-[-20px]');
+      setTimeout(() => oldest.remove(), 500);
+    }
+  }
+
   function createToast() {
+    // Limit to 2
+    removeOldestToast();
+
     const isJoin = Math.random() > 0.4;
     const name = names[Math.floor(Math.random() * names.length)];
     const city = cities[Math.floor(Math.random() * cities.length)];
@@ -60,9 +72,10 @@ window.addEventListener('DOMContentLoaded', () => {
     }
     
     const toast = document.createElement('div');
-    toast.className = "flex items-center gap-3 bg-white border border-gray-100 shadow-xl rounded-2xl p-3 animate-slide-in pointer-events-auto w-[280px] sm:w-[320px] transition-all duration-300 overflow-hidden cursor-grab active:cursor-grabbing select-none hover:border-orange-200 touch-none";
+    toast.setAttribute('data-toast', 'true');
+    toast.className = "relative flex items-center gap-3 bg-white border border-gray-100 shadow-xl rounded-2xl p-3 animate-slide-in pointer-events-auto w-[280px] sm:w-[320px] transition-all duration-300 overflow-hidden cursor-grab active:cursor-grabbing select-none hover:border-orange-200 touch-none";
     
-    // DRAG & SWIPE LOGIC
+    // DRAG & SWIPE LOGIC (same but with manual dismissal removal)
     let startX = 0;
     let currentX = 0;
     let isDragging = false;
@@ -78,15 +91,8 @@ window.addEventListener('DOMContentLoaded', () => {
     toast.addEventListener('pointermove', (e) => {
       if (!isDragging || dismissed) return;
       currentX = e.clientX - startX;
-      // Allow swiping left or right
       toast.style.transform = `translateX(${currentX}px) rotate(${currentX * 0.05}deg)`;
-      
-      // Visual indicator of pending dismissal
-      if (Math.abs(currentX) > 80) {
-        toast.style.opacity = '0.7';
-      } else {
-        toast.style.opacity = '1';
-      }
+      toast.style.opacity = Math.abs(currentX) > 80 ? '0.7' : '1';
     });
 
     toast.addEventListener('pointerup', () => {
@@ -95,16 +101,11 @@ window.addEventListener('DOMContentLoaded', () => {
       toast.style.transition = 'all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
       
       if (Math.abs(currentX) > 80) {
-        // Dismiss
         dismissed = true;
         toast.style.opacity = '0';
         toast.style.transform = `translateX(${currentX > 0 ? 400 : -400}px) rotate(${currentX * 0.1}deg)`;
-        setTimeout(() => {
-          toast.remove();
-          createToast(); // Replace immediately
-        }, 400);
+        setTimeout(() => toast.remove(), 400);
       } else {
-        // Snap back
         toast.style.transform = 'translateX(0) rotate(0)';
         toast.style.opacity = '1';
       }
@@ -119,34 +120,44 @@ window.addEventListener('DOMContentLoaded', () => {
 
     toast.innerHTML = `
       <div class="size-10 rounded-full bg-orange-500/10 flex items-center justify-center text-xl shrink-0">${icon}</div>
-      <div class="overflow-hidden">
+      <div class="overflow-hidden pr-4">
         <p class="text-[12px] font-bold text-slate-800">${title}</p>
         <p class="text-[11px] text-slate-500 truncate">${desc}</p>
       </div>
+      <button class="toast-close">✕</button>
     `;
+
+    // Click to Dismiss
+    const dismissToast = () => {
+      if (dismissed) return;
+      dismissed = true;
+      toast.style.opacity = '0';
+      toast.style.transform = 'translateX(-20px)';
+      setTimeout(() => toast.remove(), 400);
+    };
+
+    toast.addEventListener('click', dismissToast);
+    toast.querySelector('.toast-close').addEventListener('click', (e) => {
+      e.stopPropagation();
+      dismissToast();
+    });
 
     container.appendChild(toast);
 
     // Play Sound
     const sound = document.getElementById('notif-sound');
     if (sound) {
+      sound.currentTime = 0; // Reset to start
       sound.volume = 0.7;
-      sound.play().catch(e => console.log("Som bloqueado pelo navegador"));
+      sound.play().catch(() => {});
     }
-
-    // Auto-remove and replace to maintain 2
-    setTimeout(() => {
-      toast.classList.add('opacity-0', 'translate-x-[-20px]');
-      setTimeout(() => {
-        toast.remove();
-        createToast(); // Constant rotation
-      }, 500);
-    }, 5000 + (Math.random() * 2000));
   }
 
-  // Initial 2 toasts with a slight staggered delay
-  setTimeout(createToast, 1000);
-  setTimeout(createToast, 2500);
+  // Initial and random interval
+  setTimeout(createToast, 1500);
+  setInterval(() => {
+    createToast();
+  }, 6000 + (Math.random() * 3000));
 })();
 
 /* ============================================
