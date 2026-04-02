@@ -129,14 +129,28 @@ body {
 }
 
 /* ============================================
-   SUBHEADLINE
+   SUBHEADLINES
    ============================================ */
+.new-subheadline {
+  font-size: 18px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  max-width: 450px;
+  animation: fadeInUp 0.9s ease 0.3s both;
+}
+
+.new-subheadline strong {
+  color: var(--orange);
+  font-weight: 700;
+}
+
 .subheadline {
   font-size: 16px;
   color: var(--text-secondary);
   line-height: 1.6;
   max-width: 400px;
-  animation: fadeInUp 0.9s ease 0.3s both;
+  animation: fadeInUp 0.9s ease 0.7s both;
+  margin-top: 20px;
 }
 
 .subheadline strong {
@@ -152,7 +166,7 @@ body {
   grid-template-columns: 1fr;
   gap: 12px;
   width: 100%;
-  animation: fadeInUp 0.9s ease 0.4s both;
+  animation: fadeInUp 0.9s ease 0.8s both;
 }
 
 .benefit-card {
@@ -224,7 +238,7 @@ body {
   display: flex;
   align-items: center;
   gap: 12px;
-  animation: fadeInUp 0.9s ease 0.5s both;
+  animation: fadeInUp 0.9s ease 0.6s both;
 }
 
 .avatars-row {
@@ -268,7 +282,7 @@ body {
               inset 0 2px 4px rgba(255, 255, 255, 0.3);
   position: relative;
   overflow: hidden;
-  animation: scale-pulse 3s ease-in-out infinite, fadeInUp 0.9s ease 0.55s both;
+  animation: scale-pulse 3s ease-in-out infinite, fadeInUp 0.9s ease 0.4s both;
   cursor: default;
 }
 
@@ -347,7 +361,7 @@ body {
   max-width: 380px;
   box-shadow: 0 8px 30px var(--orange-glow), 0 2px 8px rgba(0,0,0,0.4);
   transition: transform 0.2s, box-shadow 0.2s, filter 0.2s;
-  animation: fadeInUp 0.9s ease 0.6s both, cta-pulse 2.5s ease-in-out 1.5s infinite;
+  animation: fadeInUp 0.9s ease 0.5s both, cta-pulse 2.5s ease-in-out 1.5s infinite;
   letter-spacing: 0.01em;
   text-transform: uppercase;
   position: relative;
@@ -358,7 +372,7 @@ body {
 .cta-green {
   background: linear-gradient(135deg, #25D366, #128C7E);
   box-shadow: 0 8px 30px rgba(37, 211, 102, 0.4), 0 2px 8px rgba(0,0,0,0.4);
-  animation: fadeInUp 0.9s ease 0.6s both, cta-pulse-green 2.5s ease-in-out 1.5s infinite;
+  animation: fadeInUp 0.9s ease 0.5s both, cta-pulse-green 2.5s ease-in-out 1.5s infinite;
 }
 
 .cta-green:hover {
@@ -419,7 +433,7 @@ body {
   gap: 12px;
   flex-wrap: wrap;
   justify-content: center;
-  animation: fadeInUp 0.9s ease 0.7s both;
+  animation: fadeInUp 0.9s ease 0.9s both;
 }
 
 .trust-badge {
