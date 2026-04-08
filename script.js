@@ -206,5 +206,5 @@ window.addEventListener('DOMContentLoaded', () => {
    ============================================ */
 document.getElementById('cta-whatsapp').addEventListener('click', function (e) {
   // Substitua pela URL do grupo WhatsApp
-  this.href = 'https://chat.whatsapp.com/SEU_LINK_AQUI';
+  this.href = 'https://chat.whatsapp.com/EDbXvfoSzkf9puM7sHOeTD?mode=gi_t';
 });
